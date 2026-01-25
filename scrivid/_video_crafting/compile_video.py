@@ -42,4 +42,4 @@ def compile_video(instructions: Sequence[INSTRUCTIONS], metadata: Metadata):
             create_frame(frame_information, separated_instructions)
 
         fill_undrawn_frames(temp_dir.dir, video_length)
-        stitch_video(temp_dir.dir, metadata)
+        stitch_video(temp_dir.dir, metadata, video_length)
