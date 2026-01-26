@@ -119,31 +119,6 @@ class InvokePrevious(_RootMotionTree):
 
 
 @_dynamic_attributes
-class MotionTree(_RootMotionTree):
-    _attributes_ = (_Attribute.BODY,)
-
-    def convert_to_string(self, *, indent: int = 0, _previous_indent: int = 0):
-        if len(self.body) == 0:
-            return repr(self)
-
-        indent_sequence = ""
-        if indent > 0:
-            indent_sequence = f"\n{' ' * _previous_indent}"
-
-        return (
-            f"{indent_sequence}{self.__class__.__name__}("
-            + f"{indent_sequence}{' ' * indent}body=["
-            + ', '.join(
-                node.convert_to_string(indent=indent, _previous_indent=(2*indent)+_previous_indent)
-                if getattr(node, "convert_to_string", False)
-                else f"{indent_sequence}{' ' * (2 * indent)}{node!r}"
-                for node in self.body
-            )
-            + "])"
-        )
-
-
-@_dynamic_attributes
 class MoveImage(_RootMotionTree):
     _attributes_ = (_Attribute.ID, _Attribute.TIME, _Attribute.DURATION)
 
@@ -174,12 +149,37 @@ class Start(_RootMotionTree):
     _attributes_ = ()
 
 
+@_dynamic_attributes
+class VideoInstructions(_RootMotionTree):
+    _attributes_ = (_Attribute.BODY,)
+
+    def convert_to_string(self, *, indent: int = 0, _previous_indent: int = 0):
+        if len(self.body) == 0:
+            return repr(self)
+
+        indent_sequence = ""
+        if indent > 0:
+            indent_sequence = f"\n{' ' * _previous_indent}"
+
+        return (
+            f"{indent_sequence}{self.__class__.__name__}("
+            + f"{indent_sequence}{' ' * indent}body=["
+            + ', '.join(
+                node.convert_to_string(indent=indent, _previous_indent=(2*indent)+_previous_indent)
+                if getattr(node, "convert_to_string", False)
+                else f"{indent_sequence}{' ' * (2 * indent)}{node!r}"
+                for node in self.body
+            )
+            + "])"
+        )
+
+
 if TYPE_CHECKING:
     # This is set up *after* the MotionTree Nodes are defined, to prevent type checking issues
-    MOTION_NODES = Union[Continue, End, HideImage, MotionTree, ShowImage, Start]
+    MOTION_NODES = Union[Continue, End, HideImage, VideoInstructions, ShowImage, Start]
 
 
-def dump(motion_tree: MotionTree, *, indent: int = 0) -> str:
+def dump(motion_tree: VideoInstructions, *, indent: int = 0) -> str:
     if hasattr(motion_tree, "convert_to_string"):
         return motion_tree.convert_to_string(indent=indent).strip()
     else:
@@ -201,8 +201,8 @@ def _create_command_node(adjustment: Adjustment) -> Optional[Union[HideImage, Mo
         return None
 
 
-def _create_motion_tree(separated_instructions: SeparatedInstructions) -> MotionTree:
-    motion_tree = MotionTree()
+def _create_motion_tree(separated_instructions: SeparatedInstructions) -> VideoInstructions:
+    motion_tree = VideoInstructions()
 
     motion_tree.body.append(Start())
 
@@ -277,14 +277,14 @@ def _loop_over_adjustments(adjustments: Dict[Adjustment]) -> Iterator[MOTION_NOD
         yield InvokePrevious(duration_value)
 
 
-def parse(instructions: Union[Sequence[REFERENCES], SeparatedInstructions]) -> MotionTree:
+def parse(instructions: Union[Sequence[REFERENCES], SeparatedInstructions]) -> VideoInstructions:
     if not isinstance(instructions, SeparatedInstructions):
         instructions = separate_instructions(instructions)
 
     return _create_motion_tree(instructions)
 
 
-def walk(motion_tree: MotionTree) -> Iterator[MOTION_NODES]:
+def walk(motion_tree: VideoInstructions) -> Iterator[MOTION_NODES]:
     yield motion_tree
 
     if not hasattr(motion_tree, "body"):
