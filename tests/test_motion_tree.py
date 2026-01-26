@@ -143,7 +143,7 @@ def test_nodes_has_methods_required(node_cls, method):
 )
 def test_nodes_inheritance(node_cls, args):
     node = node_cls(*args)
-    assert isinstance(node, motion_tree.RootMotionTree)
+    assert isinstance(node, motion_tree._RootMotionTree)
 
 
 @categorize(category="motion_tree")
