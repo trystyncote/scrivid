@@ -23,30 +23,30 @@ def has_method(cls, method):
     "sample_module,expected_string_raw", 
     assemble_arguments(
         (empty, unwrap_string(r"""
-            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}HideImage(id='HIDDEN', time=0), {\b}{\i}{\i}Conti
-            nue(length=1), {\b}{\i}{\i}MoveImage(id='HIDDEN', time=1, duration=11), {\b}{\i}{\i}InvokePrevious(length=1
-            1), {\b}{\i}{\i}End()])
+            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}HideImage(id='HIDDEN', time=0), {\b}{\i}{
+            \i}Continue(length=1), {\b}{\i}{\i}MoveImage(id='HIDDEN', time=1, duration=11), {\b}{\i}{\i}InvokePrevious(
+            length=11), {\b}{\i}{\i}End()])
         """)),
         (figure_eight, unwrap_string(r"""
-            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}Continue(length=6), {\b}{\i}{\i}MoveImage(id='BLO
-            CK', time=6, duration=10), {\b}{\i}{\i}InvokePrevious(length=10), {\b}{\i}{\i}MoveImage(id='BLOCK', time=16
-            , duration=5), {\b}{\i}{\i}InvokePrevious(length=5), {\b}{\i}{\i}MoveImage(id='BLOCK', time=21, duration=5)
-            , {\b}{\i}{\i}InvokePrevious(length=10), {\b}{\i}{\i}MoveImage(id='BLOCK', time=26, duration=10), {\b}{\i}{
-            \i}InvokePrevious(length=5), {\b}{\i}{\i}MoveImage(id='BLOCK', time=36, duration=5), {\b}{\i}{\i}InvokePrev
-            ious(length=5), {\b}{\i}{\i}MoveImage(id='BLOCK', time=41, duration=5), {\b}{\i}{\i}InvokePrevious(length=5
-            ), {\b}{\i}{\i}End()])
+            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}Continue(length=6), {\b}{\i}{\i}MoveImage(
+            id='BLOCK', time=6, duration=10), {\b}{\i}{\i}InvokePrevious(length=10), {\b}{\i}{\i}MoveImage(id='BLOCK'
+            , time=16, duration=5), {\b}{\i}{\i}InvokePrevious(length=5), {\b}{\i}{\i}MoveImage(id='BLOCK', time=21, du
+            ration=5), {\b}{\i}{\i}InvokePrevious(length=10), {\b}{\i}{\i}MoveImage(id='BLOCK', time=26, duration=10)
+            , {\b}{\i}{\i}InvokePrevious(length=5), {\b}{\i}{\i}MoveImage(id='BLOCK', time=36, duration=5), {\b}{\i}{\i
+            }InvokePrevious(length=5), {\b}{\i}{\i}MoveImage(id='BLOCK', time=41, duration=5), {\b}{\i}{\i}InvokePrevio
+            us(length=5), {\b}{\i}{\i}End()])
         """)),
         (image_drawing, unwrap_string(r"""
-            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}HideImage(id='HIDDEN', time=0), {\b}{\i}{\i}Conti
-            nue(length=20), {\b}{\i}{\i}ShowImage(id='HIDDEN', time=20), {\b}{\i}{\i}End()])
+            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}HideImage(id='HIDDEN', time=0), {\b}{\i}{
+            \i}Continue(length=20), {\b}{\i}{\i}ShowImage(id='HIDDEN', time=20), {\b}{\i}{\i}End()])
         """)),
         (overlap, unwrap_string(r"""
-            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}Continue(length=12), {\b}{\i}{\i}MoveImage(id='RI
-            GHT', time=12, duration=1), {\b}{\i}{\i}InvokePrevious(length=1), {\b}{\i}{\i}End()])
+            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}Continue(length=12), {\b}{\i}{\i}MoveImage
+            (id='RIGHT', time=12, duration=1), {\b}{\i}{\i}InvokePrevious(length=1), {\b}{\i}{\i}End()])
         """)),
         (slide, unwrap_string(r"""
-            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}Continue(length=1), {\b}{\i}{\i}MoveImage(id='sto
-            ne', time=1, duration=36), {\b}{\i}{\i}InvokePrevious(length=36), {\b}{\i}{\i}End()])
+            VideoInstructions({\b}{\i}body=[{\b}{\i}{\i}Start(), {\b}{\i}{\i}Continue(length=1), {\b}{\i}{\i}MoveImage(
+            id='stone', time=1, duration=36), {\b}{\i}{\i}InvokePrevious(length=36), {\b}{\i}{\i}End()])
         """))
     )
 )
