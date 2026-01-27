@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from . import adjustments, errors
+from . import adjustments
 from ._separating_instructions import separate_instructions, SeparatedInstructions
 
 from collections.abc import Hashable
-import enum
 import operator
 from typing import TYPE_CHECKING
 
-from attrs import define, field
 from sortedcontainers import SortedList
 
 if TYPE_CHECKING:
@@ -19,62 +17,6 @@ if TYPE_CHECKING:
     from typing import Dict, Iterator, Optional, Union
 
     REFERENCES = ImageReference
-
-
-class _Attribute(enum.Enum):
-    BODY = enum.auto()
-    DURATION = enum.auto()
-    ID = enum.auto()
-    INDEX = enum.auto()
-    LENGTH = enum.auto()
-    TIME = enum.auto()
-
-
-_attributes = {
-    _Attribute.BODY: ("body", list, field(factory=list, init=False)),
-    _Attribute.DURATION: ("duration", int, field()),
-    _Attribute.ID: ("id", Hashable, field()),
-    _Attribute.LENGTH: ("length", int, field()),
-    _Attribute.TIME: ("time", int, field())
-}
-
-
-def _define_class(cls):
-    if not hasattr(cls, "__annotations__"):
-        cls.__annotations__ = {}
-
-    name = 0
-    annotation = 1
-    value = 2
-
-    for attr in cls._attributes_:
-        attribute = _attributes[attr]
-        cls.__annotations__[attribute[name]] = attribute[annotation]
-        setattr(cls, attribute[name], attribute[value])
-
-    cls = define(eq=False, frozen=True)(cls)
-    return cls
-
-
-def _dynamic_attributes(cls=None, /):
-    def wrapper():
-        return _define_class(cls)
-
-    if cls is None:  # @_dynamic_attributes()
-        return wrapper
-
-    if not hasattr(cls, "_attributes_"):
-        raise errors.InternalError(AttributeError(f"Class \'{cls.__name__}\' does not define \'_attributes_\'."))
-
-    for attr in cls._attributes_:
-        try:
-            _attributes[attr]
-        except KeyError:
-            raise errors.InternalError(
-                AttributeError(f"Class \'{cls.__name__}\' has an undefined attribute: \'{attr}\'.")
-            )
-
-    return wrapper()  # @_dynamic_attributes
 
 
 def _compare_attribute_time(op: operator):
@@ -90,21 +32,49 @@ class _RootMotionTree:
     __slots__ = ()
 
 
-@_dynamic_attributes
 class Continue(_RootMotionTree):
-    _attributes_ = (_Attribute.LENGTH,)
+    __slots__ = ("_length",)
+
+    def __new__(cls, length: int):
+        self = super().__new__(cls)
+        self._length = length
+        return self
+
+    @property
+    def length(self):
+        return self._length
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(length={self.length})"
 
 
-@_dynamic_attributes
 class End(_RootMotionTree):
-    _attributes_ = ()
+    __slots__ = ()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}()"
 
 
-@_dynamic_attributes
 class HideImage(_RootMotionTree):
-    _attributes_ = (_Attribute.ID, _Attribute.TIME)
+    __slots__ = ("_identity", "_time")
 
-    # For compatibility with sortedcontainers.SortedList.
+    def __new__(cls, identity: Hashable, time: int):
+        self = super().__new__(cls)
+        self._identity = identity
+        self._time = time
+        return self
+
+    @property
+    def id(self):
+        return self._identity
+
+    @property
+    def time(self):
+        return self._time
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.id!r}, time={self.time})"
+
     __eq__ = _compare_attribute_time(operator.eq)
     __ge__ = _compare_attribute_time(operator.ge)
     __gt__ = _compare_attribute_time(operator.gt)
@@ -113,16 +83,47 @@ class HideImage(_RootMotionTree):
     __ne__ = _compare_attribute_time(operator.ne)
 
 
-@_dynamic_attributes
 class InvokePrevious(_RootMotionTree):
-    _attributes_ = (_Attribute.LENGTH,)
+    __slots__ = ("_length",)
+
+    def __new__(cls, length: int):
+        self = super().__new__(cls)
+        self._length = length
+        return self
+
+    @property
+    def length(self):
+        return self._length
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(length={self.length})"
 
 
-@_dynamic_attributes
 class MoveImage(_RootMotionTree):
-    _attributes_ = (_Attribute.ID, _Attribute.TIME, _Attribute.DURATION)
+    __slots__ = ("_duration", "_identity", "_time")
 
-    # For compatibility with sortedcontainers.SortedList.
+    def __new__(cls, identity: Hashable, time: int, duration: int):
+        self = super().__new__(cls)
+        self._duration = duration
+        self._identity = identity
+        self._time = time
+        return self
+
+    @property
+    def duration(self):
+        return self._duration
+
+    @property
+    def id(self):
+        return self._identity
+
+    @property
+    def time(self):
+        return self._time
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.id!r}, time={self.time}, duration={self.duration})"
+
     __eq__ = _compare_attribute_time(operator.eq)
     __ge__ = _compare_attribute_time(operator.ge)
     __gt__ = _compare_attribute_time(operator.gt)
@@ -131,11 +132,26 @@ class MoveImage(_RootMotionTree):
     __ne__ = _compare_attribute_time(operator.ne)
 
 
-@_dynamic_attributes
 class ShowImage(_RootMotionTree):
-    _attributes_ = (_Attribute.ID, _Attribute.TIME)
+    __slots__ = ("_identity", "_time")
 
-    # For compatibility with sortedcontainers.SortedList.
+    def __new__(cls, identity: Hashable, time: int):
+        self = super().__new__(cls)
+        self._identity = identity
+        self._time = time
+        return self
+
+    @property
+    def id(self):
+        return self._identity
+
+    @property
+    def time(self):
+        return self._time
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.id!r}, time={self.time})"
+
     __eq__ = _compare_attribute_time(operator.eq)
     __ge__ = _compare_attribute_time(operator.ge)
     __gt__ = _compare_attribute_time(operator.gt)
@@ -144,16 +160,28 @@ class ShowImage(_RootMotionTree):
     __ne__ = _compare_attribute_time(operator.ne)
 
 
-@_dynamic_attributes
 class Start(_RootMotionTree):
-    _attributes_ = ()
+    __slots__ = ()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}()"
 
 
-@_dynamic_attributes
 class VideoInstructions(_RootMotionTree):
-    _attributes_ = (_Attribute.BODY,)
+    __slots__ = ("_body",)
 
-    def convert_to_string(self, *, indent: int = 0, _previous_indent: int = 0):
+    _body: list[MOTION_NODES]
+
+    def __new__(cls):
+        self = super().__new__(cls)
+        self._body = []
+        return self
+
+    @property
+    def body(self) -> list[MOTION_NODES]:
+        return self._body
+
+    def convert_to_string(self, *, indent: int = 0, _previous_indent: int = 0) -> str:
         if len(self.body) == 0:
             return repr(self)
 
