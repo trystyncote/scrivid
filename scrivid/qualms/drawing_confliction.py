@@ -11,8 +11,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .._file_objects.images import ImageReference
 
-    from typing import List
-
 
 def _above(a: ImageCoordinates, b: ImageCoordinates):
     return a.y_prime < b.y
@@ -47,7 +45,7 @@ class DrawingConfliction(Qualm):
         return f"images with IDs \'{self.image_a.ID}\' and \'{self.image_b.ID}\' overlap with each other"
 
     @classmethod
-    def check(cls, qualms: List[Qualm], index: int, image_a: ImageReference, image_b: ImageReference):
+    def check(cls, qualms: list[Qualm], index: int, image_a: ImageReference, image_b: ImageReference):
         if not image_a.is_opened:
             image_a.open()
         if not image_b.is_opened:

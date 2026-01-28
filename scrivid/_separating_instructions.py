@@ -10,7 +10,7 @@ from sortedcontainers import SortedList
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-    from typing import Dict, Hashable, Union
+    from typing import Hashable, Union
 
     INSTRUCTIONS = Union[ImageReference, Adjustment]
     REFERENCES = ImageReference
@@ -19,8 +19,8 @@ if TYPE_CHECKING:
 class SeparatedInstructions:
     __slots__ = ("adjustments", "references")
 
-    adjustments: Dict[Hashable, SortedList[Adjustment]]
-    references: Dict[Hashable, ImageReference]
+    adjustments: dict[Hashable, SortedList[Adjustment]]
+    references: dict[Hashable, ImageReference]
 
     def __init__(self):
         self.adjustments = {}

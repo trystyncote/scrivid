@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Tuple, Union
+    from typing import Union
 
 
 _NOT_SPECIFIED = sentinel("_NOT_SPECIFIED")
@@ -76,7 +76,7 @@ class Metadata:
 
     __slots__ = ("_window_size", "frame_rate", "save_location", "video_name")
 
-    _window_size: Tuple[int, int]
+    _window_size: tuple[int, int]
 
     def __init__(
         self,
@@ -84,7 +84,7 @@ class Metadata:
         frame_rate: Union[int, _NOT_SPECIFIED] = _NOT_SPECIFIED,
         save_location: Union[str, Path, _NOT_SPECIFIED] = _NOT_SPECIFIED,
         video_name: Union[str, _NOT_SPECIFIED] = _NOT_SPECIFIED,
-        window_size: Union[Tuple[int, int], _NOT_SPECIFIED] = _NOT_SPECIFIED
+        window_size: Union[tuple[int, int], _NOT_SPECIFIED] = _NOT_SPECIFIED
     ):
         if isinstance(save_location, str):
             save_location = Path(save_location)
@@ -107,7 +107,7 @@ class Metadata:
         return self._window_size
 
     @window_size.setter
-    def window_size(self, new_value: Tuple[int, int]):
+    def window_size(self, new_value: tuple[int, int]):
         self._window_size = new_value
 
     @property

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from ._file_objects.images import ImageReference
 
     from collections.abc import Sequence
-    from typing import Dict, Iterator, Optional, Union
+    from typing import Iterator, Optional, Union
 
     REFERENCES = ImageReference
 
@@ -252,7 +252,7 @@ def _invoke_duration_value(duration_value: int, current_node: Union[HideImage, M
         return duration_value
 
 
-def _loop_over_adjustments(adjustments: Dict[Adjustment]) -> Iterator[MOTION_NODES]:
+def _loop_over_adjustments(adjustments: dict[Adjustment]) -> Iterator[MOTION_NODES]:
     current_node = None
     duration_value = 0
     sorted_adjustments = SortedList(

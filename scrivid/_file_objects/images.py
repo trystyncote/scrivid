@@ -13,7 +13,7 @@ from PIL import Image
 
 if TYPE_CHECKING:
     from collections.abc import Hashable
-    from typing import Optional, Tuple, Union
+    from typing import Optional, Union
 
     Properties = properties.Properties
     VisibilityStatus = properties.VisibilityStatus
@@ -57,7 +57,7 @@ class ImageFileReference:
         else:
             return self._file_handler.width
 
-    def get_pixel_value(self, coordinates: Tuple[int, int]):
+    def get_pixel_value(self, coordinates: tuple[int, int]):
         if not self.is_opened:
             return None
         else:
@@ -161,7 +161,7 @@ class ImageReference:
         self._file: ImageFileReference
         return self._file.get_image_width()
 
-    def get_pixel_value(self, coordinates: Tuple[int, int]):
+    def get_pixel_value(self, coordinates: tuple[int, int]):
         self._file: ImageFileReference
         return self._file.get_pixel_value(coordinates)
 

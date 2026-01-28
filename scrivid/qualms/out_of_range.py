@@ -11,8 +11,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .._file_objects.images import ImageReference
 
-    from typing import List, Tuple
-
 
 class OutOfRange(Qualm):
     __slots__ = ("image", "index")
@@ -37,7 +35,7 @@ class OutOfRange(Qualm):
         return f"image with ID \'{self.image.ID}\' may be printed outside of canvas boundaries"
 
     @classmethod
-    def check(cls, qualms: List[Qualm], index: int, image: ImageReference, window_size: Tuple[int, int]):
+    def check(cls, qualms: list[Qualm], index: int, image: ImageReference, window_size: tuple[int, int]):
         if not image.is_opened:
             image.open()
 

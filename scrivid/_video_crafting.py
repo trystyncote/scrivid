@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
     from collections.abc import Sequence
     from pathlib import Path
-    from typing import List, Tuple, Union
+    from typing import Union
 
     INSTRUCTIONS = Union[ImageReference, Adjustment]
     MotionTree = motion_tree.MotionTree
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 class _FrameCanvas:
     __slots__ = ("_canvas", "_pixel_canvas", "index")
 
-    def __init__(self, index: int, window_size: Tuple[int, int]):
+    def __init__(self, index: int, window_size: tuple[int, int]):
         self._canvas = Image.new("RGB", window_size, (255, 255, 255))
         self._pixel_canvas = self._canvas.load()
         self.index = index
@@ -40,7 +40,7 @@ class _FrameCanvas:
         self._canvas = None
         self._pixel_canvas = None
 
-    def set_pixel(self, coordinates: Tuple[int, int], pixel_value: Tuple[int, int, int]):
+    def set_pixel(self, coordinates: tuple[int, int], pixel_value: tuple[int, int, int]):
         # TODO: Implement behaviour for when the coordinates has a negative
         # value, to simply return instead of trying to draw it, since a 
         # negative value draws on the other side, but not vice versa.
@@ -53,7 +53,7 @@ class _FrameCanvas:
 class _FrameInfo:
     __slots__ = ("canvas", "index", "temp_dir")
 
-    def __init__(self, index: int, temp_dir: Path, window_size: Tuple[int, int]):
+    def __init__(self, index: int, temp_dir: Path, window_size: tuple[int, int]):
         self.canvas = _FrameCanvas(index, window_size)
         self.index = index
         self.temp_dir = temp_dir
@@ -155,8 +155,8 @@ def _fill_undrawn_frames(temporary_directory: Path, video_length: int):
 def _generate_frames(
         parsed_motion_tree: MotionTree,
         temporary_directory: Path,
-        window_size: Tuple[int, int]
-) -> Tuple[List[_FrameInfo], int]:
+        window_size: tuple[int, int]
+) -> tuple[list[_FrameInfo], int]:
     # ...
     frames = []
     index = 0
