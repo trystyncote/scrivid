@@ -1,7 +1,10 @@
-from functions import assemble_arguments, categorize, get_current_directory, TemporaryDirectory
+from functions import assemble_arguments, categorize, get_current_directory
 from samples import empty, figure_eight, image_drawing, overlap, slide
 
 import scrivid
+
+import pathlib
+import tempfile
 
 import cv2 as opencv
 import imagehash
@@ -49,8 +52,8 @@ def loop_over_video_objects(actual, expected):
 
 @pytest.fixture(scope="module")
 def temp_dir():
-    with TemporaryDirectory(get_current_directory()) as tempdir:
-        yield tempdir.dir
+    with tempfile.TemporaryDirectory(dir=get_current_directory(), prefix=".scrivid-cache-") as tempdir:
+        yield pathlib.Path(tempdir)
 
 
 class VideoFilePointer:

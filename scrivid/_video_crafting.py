@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from . import adjustments, errors, motion_tree, properties
 from ._separating_instructions import separate_instructions
-from ._utils import TemporaryAttribute, TemporaryDirectory
+from ._utils import TemporaryAttribute
 
 from copy import deepcopy
 import itertools
 import os
+from pathlib import Path
 import subprocess
+import tempfile
 from typing import TYPE_CHECKING
 
 from PIL import Image
@@ -19,7 +21,6 @@ if TYPE_CHECKING:
     from .metadata import Metadata
 
     from collections.abc import Sequence
-    from pathlib import Path
     from typing import TypeAlias
 
     INSTRUCTIONS: TypeAlias = ImageReference | Adjustment
@@ -228,11 +229,13 @@ def compile_video(instructions: Sequence[INSTRUCTIONS], metadata: Metadata):
     separated_instructions = separate_instructions(instructions)
     parsed_motion_tree = motion_tree.parse(separated_instructions)
 
-    with TemporaryDirectory(metadata.save_location / ".scrivid-cache") as temp_dir:
-        frames, video_length = _generate_frames(parsed_motion_tree, temp_dir.dir, metadata.window_size)
+    with tempfile.TemporaryDirectory(dir=metadata.save_location, prefix=".scrivid-cache-") as temp_dir:
+        temp_dir = Path(temp_dir)
+
+        frames, video_length = _generate_frames(parsed_motion_tree, temp_dir, metadata.window_size)
 
         for frame_information in frames:
             _create_frame(frame_information, separated_instructions)
 
-        _fill_undrawn_frames(temp_dir.dir, video_length)
-        _stitch_video(temp_dir.dir, metadata, video_length)
+        _fill_undrawn_frames(temp_dir, video_length)
+        _stitch_video(temp_dir, metadata, video_length)

@@ -36,15 +36,3 @@ class TemporaryAttribute:
     def destroy(self):
         self._cleanup_function(self.value)
         self.value = None
-
-
-class TemporaryDirectory:
-    def __init__(self, dir: Path):
-        self.dir = dir
-
-    def __enter__(self):
-        os.mkdir(self.dir)
-        return self
-
-    def __exit__(self, *_):
-        shutil.rmtree(self.dir)

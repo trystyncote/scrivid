@@ -65,20 +65,5 @@ def relational_unpacking(*iters):
     return _recursive_relational_unpacking([], iters, ())
 
 
-# Copied from `scrivid.compile_video` to avoid dependency.
-class TemporaryDirectory:
-    def __init__(self, folder_location: Path):
-        self.dir = folder_location / ".scrivid-test-cache"
-
-    def __enter__(self):
-        import os
-        os.mkdir(self.dir)
-        return self
-
-    def __exit__(self, *_):
-        import shutil
-        shutil.rmtree(self.dir)
-
-
 def unwrap_string(string):
     return textwrap.dedent(string).replace("\n", "")
