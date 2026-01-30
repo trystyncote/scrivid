@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Protocol, runtime_checkable, Union
+from typing import Protocol, runtime_checkable
 
 
 def call_close(file: FileAccess):
@@ -14,7 +14,7 @@ class FileAccess(Protocol):
     FileAccess classes must have two methods: open() and close(). The signature
     of its __init__ method must have one positional-only argument: 'file'.
     """
-    def __init__(self, file: Union[str, Path], /): ...
+    def __init__(self, file: str | Path, /): ...
     @property
     def is_opened(self) -> bool: ...
     def open(self): ...
@@ -24,7 +24,7 @@ class FileAccess(Protocol):
 class FileReference:
     __slots__ = ("_file", "_file_handler")
 
-    def __init__(self, file: Union[str, Path], /):
+    def __init__(self, file: str | Path, /):
         if not isinstance(file, Path):
             file = Path(file)
 

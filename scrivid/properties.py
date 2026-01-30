@@ -4,10 +4,6 @@ from . import errors
 from ._utils import sentinel, SentinelBase
 
 import enum
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import Union
 
 
 EXCLUDED = sentinel("EXCLUDED")
@@ -57,11 +53,11 @@ class Properties:
 
     def __init__(
             self, *,
-            layer: Union[int, SentinelBase] = EXCLUDED,
-            scale: Union[float, int, SentinelBase] = EXCLUDED,
-            visibility: Union[VisibilityStatus, SentinelBase] = EXCLUDED,
-            x: Union[int, SentinelBase] = EXCLUDED,
-            y: Union[int, SentinelBase] = EXCLUDED
+            layer: int | SentinelBase = EXCLUDED,
+            scale: float | int | SentinelBase = EXCLUDED,
+            visibility: VisibilityStatus | SentinelBase = EXCLUDED,
+            x: int | SentinelBase = EXCLUDED,
+            y: int | SentinelBase = EXCLUDED
     ):
         self.layer = layer
         self.scale = scale
@@ -138,11 +134,11 @@ class Properties:
 
 def create(
         *,
-        layer: Union[int, SentinelBase] = EXCLUDED,
-        scale: Union[float, int, SentinelBase] = EXCLUDED,
-        visibility: Union[VisibilityStatus, SentinelBase] = EXCLUDED,
-        x: Union[int, SentinelBase] = EXCLUDED,
-        y: Union[int, SentinelBase] = EXCLUDED
+        layer: int | SentinelBase = EXCLUDED,
+        scale: float | int | SentinelBase = EXCLUDED,
+        visibility: VisibilityStatus | SentinelBase = EXCLUDED,
+        x: int | SentinelBase = EXCLUDED,
+        y: int | SentinelBase = EXCLUDED
 ) -> Properties:
     # Define default values for non-required variables. If it's intended to be
     # used specifically for merging, you may wish to instantiate it directly,

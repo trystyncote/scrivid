@@ -20,10 +20,10 @@ if TYPE_CHECKING:
 
     from collections.abc import Sequence
     from pathlib import Path
-    from typing import Union
+    from typing import TypeAlias
 
-    INSTRUCTIONS = Union[ImageReference, Adjustment]
-    MotionTree = motion_tree.MotionTree
+    INSTRUCTIONS: TypeAlias = ImageReference | Adjustment
+    MotionTree: TypeAlias = motion_tree.MotionTree
 
 
 class _FrameCanvas:

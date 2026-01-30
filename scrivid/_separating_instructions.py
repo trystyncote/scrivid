@@ -10,10 +10,10 @@ from sortedcontainers import SortedList
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-    from typing import Hashable, Union
+    from typing import Hashable, TypeAlias
 
-    INSTRUCTIONS = Union[ImageReference, Adjustment]
-    REFERENCES = ImageReference
+    INSTRUCTIONS: TypeAlias = ImageReference | Adjustment
+    REFERENCES: TypeAlias = ImageReference
 
 
 class SeparatedInstructions:

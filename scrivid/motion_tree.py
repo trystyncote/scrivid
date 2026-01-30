@@ -14,9 +14,9 @@ if TYPE_CHECKING:
     from ._file_objects.images import ImageReference
 
     from collections.abc import Sequence
-    from typing import Iterator, Optional, Union
+    from typing import Iterator, TypeAlias
 
-    REFERENCES = ImageReference
+    REFERENCES: TypeAlias = ImageReference
 
 
 def _compare_attribute_time(op: operator):
@@ -204,7 +204,8 @@ class VideoInstructions(_RootMotionTree):
 
 if TYPE_CHECKING:
     # This is set up *after* the MotionTree Nodes are defined, to prevent type checking issues
-    MOTION_NODES = Union[Continue, End, HideImage, VideoInstructions, ShowImage, Start]
+    ADJUSTMENT_NODES = HideImage | MoveImage | ShowImage
+    MOTION_NODES = Continue | End | HideImage | MoveImage | ShowImage | Start | VideoInstructions
 
 
 def dump(motion_tree: VideoInstructions, *, indent: int = 0) -> str:
@@ -214,7 +215,7 @@ def dump(motion_tree: VideoInstructions, *, indent: int = 0) -> str:
         return repr(motion_tree)
 
 
-def _create_command_node(adjustment: Adjustment) -> Optional[Union[HideImage, MoveImage, ShowImage]]:
+def _create_command_node(adjustment: Adjustment) -> ADJUSTMENT_NODES | None:
     adjustment_type = type(adjustment)
     adjustment_time = adjustment.activation_time
     relevant_id = adjustment.ID
@@ -242,7 +243,7 @@ def _create_motion_tree(separated_instructions: SeparatedInstructions) -> VideoI
     return motion_tree
 
 
-def _invoke_duration_value(duration_value: int, current_node: Union[HideImage, MoveImage, ShowImage]) -> int:
+def _invoke_duration_value(duration_value: int, current_node: ADJUSTMENT_NODES) -> int:
     if not hasattr(current_node, "duration"):
         return duration_value
 
@@ -305,7 +306,7 @@ def _loop_over_adjustments(adjustments: dict[Adjustment]) -> Iterator[MOTION_NOD
         yield InvokePrevious(duration_value)
 
 
-def parse(instructions: Union[Sequence[REFERENCES], SeparatedInstructions]) -> VideoInstructions:
+def parse(instructions: Sequence[REFERENCES] | SeparatedInstructions) -> VideoInstructions:
     if not isinstance(instructions, SeparatedInstructions):
         instructions = separate_instructions(instructions)
 

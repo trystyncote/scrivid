@@ -5,19 +5,20 @@ from .. import abc, properties
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Hashable, Union
+    from collections.abc import Hashable
+    from typing import TypeAlias
 
-    Properties = properties.Properties
+    Properties: TypeAlias = properties.Properties
 
 
 EXCLUDED = properties.EXCLUDED
 
 
 def _increment_value(
-        full_value: Union[float, int, EXCLUDED],
+        full_value: float | int | EXCLUDED,
         duration: int,
         length: int,
-        precision: Union[float, int]
+        precision: float | int
 ):
     if full_value is EXCLUDED:
         return full_value

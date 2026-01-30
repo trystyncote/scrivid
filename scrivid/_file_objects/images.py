@@ -13,10 +13,10 @@ from PIL import Image
 
 if TYPE_CHECKING:
     from collections.abc import Hashable
-    from typing import Optional, Union
+    from typing import TypeAlias
 
-    Properties = properties.Properties
-    VisibilityStatus = properties.VisibilityStatus
+    Properties: TypeAlias = properties.Properties
+    VisibilityStatus: TypeAlias = properties.VisibilityStatus
 
 
 _NS = sentinel("_NOT_SPECIFIED")
@@ -26,7 +26,7 @@ EXCLUDED = properties.EXCLUDED
 class ImageFileReference:
     __slots__ = ("_file", "_file_handler", "_pixel_handler")
 
-    def __init__(self, file: Union[str, Path], /):
+    def __init__(self, file: str | Path, /):
         if not isinstance(file, Path):
             file = Path(file)
 
@@ -146,7 +146,7 @@ class ImageReference:
         c._ID = new_ID
         return c
 
-    def deepcopy(self, new_ID: Hashable, memo: Optional[dict] = None):
+    def deepcopy(self, new_ID: Hashable, memo: dict | None = None):
         if memo is None:
             memo = {}
         dc = deepcopy(self, memo)
@@ -181,14 +181,14 @@ class ImageReference:
 
 def create_image_reference(
         ID: Hashable,
-        file: Union[str, Path, FileAccess],
-        properties_: Union[Properties, _NS] = _NS,
+        file: str | Path | FileAccess,
+        properties_: Properties | _NS = _NS,
         /, *,
-        layer: Union[int, EXCLUDED] = EXCLUDED,
-        scale: Union[int, EXCLUDED] = EXCLUDED,
-        visibility: Union[VisibilityStatus, EXCLUDED] = EXCLUDED,
-        x: Union[int, EXCLUDED] = EXCLUDED,
-        y: Union[int, EXCLUDED] = EXCLUDED
+        layer: int | EXCLUDED = EXCLUDED,
+        scale: int | EXCLUDED = EXCLUDED,
+        visibility: VisibilityStatus | EXCLUDED = EXCLUDED,
+        x: int | EXCLUDED = EXCLUDED,
+        y: int | EXCLUDED = EXCLUDED
 ) -> ImageReference:
     # ...
     if isinstance(file, str):

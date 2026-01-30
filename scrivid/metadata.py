@@ -4,10 +4,6 @@ from . import errors
 from ._utils.sentinel_objects import sentinel
 
 from pathlib import Path
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import Union
 
 
 _NOT_SPECIFIED = sentinel("_NOT_SPECIFIED")
@@ -81,10 +77,10 @@ class Metadata:
     def __init__(
         self,
         *,
-        frame_rate: Union[int, _NOT_SPECIFIED] = _NOT_SPECIFIED,
-        save_location: Union[str, Path, _NOT_SPECIFIED] = _NOT_SPECIFIED,
-        video_name: Union[str, _NOT_SPECIFIED] = _NOT_SPECIFIED,
-        window_size: Union[tuple[int, int], _NOT_SPECIFIED] = _NOT_SPECIFIED
+        frame_rate: int | _NOT_SPECIFIED = _NOT_SPECIFIED,
+        save_location: str | Path | _NOT_SPECIFIED = _NOT_SPECIFIED,
+        video_name: str | _NOT_SPECIFIED = _NOT_SPECIFIED,
+        window_size: tuple[int, int] | _NOT_SPECIFIED = _NOT_SPECIFIED
     ):
         if isinstance(save_location, str):
             save_location = Path(save_location)
