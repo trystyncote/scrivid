@@ -1,5 +1,5 @@
 from . import adjustments, errors, file_access, motion_tree, properties, qualms
-from ._file_objects import create_image_reference, ImageFileReference, ImageReference
+from ._images import create_image_reference, ImageFileReference, ImageReference
 from ._version import __version__, __version_tuple__
 from ._video_crafting import compile_video
 from .metadata import Metadata

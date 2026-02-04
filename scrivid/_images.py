@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from .. import errors, properties
-from .._utils.sentinel_objects import sentinel
-from ..file_access import call_close, FileAccess
+from . import errors, properties
+from ._utils.sentinel_objects import sentinel
+from .file_access import call_close, FileAccess
 
 from copy import copy, deepcopy
 from pathlib import Path

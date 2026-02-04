@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from . import errors
 from .abc import Adjustment
-from ._file_objects.images import ImageReference
+from ._images import ImageReference
 
 from typing import TYPE_CHECKING
 

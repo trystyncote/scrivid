@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .._file_objects.images import ImageReference
+    from .._images import ImageReference
 
 
 class ImageCoordinates:

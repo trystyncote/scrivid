@@ -7,7 +7,7 @@ import operator
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ._file_objects.properties import Properties
+    from .properties import Properties
 
     from typing import Hashable
 

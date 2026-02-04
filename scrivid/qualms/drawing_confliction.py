@@ -9,7 +9,7 @@ from ._index import Index
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .._file_objects.images import ImageReference
+    from .._images import ImageReference
 
 
 def _above(a: ImageCoordinates, b: ImageCoordinates):

@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 from PIL import Image
 
 if TYPE_CHECKING:
-    from ._file_objects.images import ImageReference
+    from ._images import ImageReference
     from ._separating_instructions import SeparatedInstructions
     from .abc import Adjustment
     from .metadata import Metadata

@@ -11,7 +11,7 @@ from sortedcontainers import SortedList
 
 if TYPE_CHECKING:
     from .abc import Adjustment
-    from ._file_objects.images import ImageReference
+    from ._images import ImageReference
 
     from collections.abc import Sequence
     from typing import Iterator, TypeAlias
