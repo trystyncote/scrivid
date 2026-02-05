@@ -27,6 +27,18 @@ if TYPE_CHECKING:
     MotionTree: TypeAlias = motion_tree.MotionTree
 
 
+def _validate_metadata_attribute(name, value):
+    if value is None:
+        raise errors.AttributeError(f"Metadata object missing require attribute \'{name}\'.")
+
+
+def _validate_metadata(metadata):
+    _validate_metadata_attribute("frame_rate", metadata.frame_rate)
+    _validate_metadata_attribute("save_location", metadata.save_location)
+    _validate_metadata_attribute("video_name", metadata.video_name)
+    _validate_metadata_attribute("window_size", metadata.window_size)
+
+
 class _FrameCanvas:
     __slots__ = ("_canvas", "_pixel_canvas", "index")
 
@@ -224,7 +236,7 @@ def compile_video(instructions: Sequence[INSTRUCTIONS], metadata: Metadata):
     :param metadata: An instance of Metadata that stores the attributes
         of the video.
     """
-    metadata._validate()
+    _validate_metadata(metadata)
 
     separated_instructions = separate_instructions(instructions)
     parsed_motion_tree = motion_tree.parse(separated_instructions)

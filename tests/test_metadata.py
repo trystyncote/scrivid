@@ -17,42 +17,32 @@ METADATA_DEFAULTS = {
 }
 
 
-def _assemble_method_delete(arguments, _):
-    argument = arguments[0]
-    for key in argument:
-        current_values = argument.copy()
-        del current_values[key]
-        metadata = Metadata(**current_values)
-        yield pytest.param(metadata, id=key)
-
-
 def _assemble_method_fillvalue(arguments, _):
     argument = arguments[0]
     for key in argument:
         current_values = argument.copy()
         current_values[key] = FILL_VALUE
-        metadata = Metadata(**current_values)
-        yield pytest.param(metadata, id=key)
+        yield pytest.param(current_values, id=key)
 
 
-@parametrize("metadata", assemble_arguments(METADATA_DEFAULTS, method=_assemble_method_delete))
-def test_validation_presense(metadata):
+@parametrize("attribute", ["frame_rate", "save_location", "video_name", "window_size"])
+def test_attribute_deletion(attribute):
+    metadata = Metadata(**METADATA_DEFAULTS)
+    delattr(metadata, attribute)
+    assert getattr(metadata, attribute) is None
+
+
+@parametrize("current_values", assemble_arguments(METADATA_DEFAULTS, method=_assemble_method_fillvalue))
+def test_validation_type(current_values):
     with pytest.raises(errors.AttributeError):
-        metadata._validate()
-
-
-@parametrize("metadata", assemble_arguments(METADATA_DEFAULTS, method=_assemble_method_fillvalue))
-def test_validation_type(metadata):
-    with pytest.raises(errors.AttributeError):
-        metadata._validate()
+        Metadata(**current_values)
 
 
 @parametrize("updated_window_size", [(5, 0), (0, 5)], ids=["width", "height"])
 def test_validation_window_size_odd_numbers(updated_window_size):
-    metadata = Metadata(frame_rate=0, save_location="", video_name="")
-    metadata.window_size = updated_window_size
     with pytest.raises(errors.AttributeError):
-        metadata._validate()
+        metadata = Metadata(frame_rate=0, save_location="", video_name="")
+        metadata.window_size = updated_window_size
 
 
 def test_window_attributes():

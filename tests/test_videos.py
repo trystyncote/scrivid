@@ -90,3 +90,15 @@ def test_compile_video_output(temp_dir, sample_module):
 
     with actual.container, expected.container:
         loop_over_video_objects(actual, expected)
+
+
+@parametrize("missing_attribute", ["frame_rate", "save_location", "video_name", "window_size"])
+def test_compile_unfilled_metadata(temp_dir, missing_attribute):
+    instructions, metadata = empty.ALL()
+    metadata.save_location = pathlib.Path("")  # This is to ensure that this attribute
+    # exists upfront.
+
+    delattr(metadata, missing_attribute)
+
+    with pytest.raises(scrivid.errors.AttributeError):
+        scrivid.compile_video(instructions, metadata)
